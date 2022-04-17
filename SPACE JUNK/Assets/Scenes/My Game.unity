@@ -2593,25 +2593,13 @@ MonoBehaviour:
   m_FillRect: {fileID: 1913303885}
   m_HandleRect: {fileID: 1181617563}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: -80
+  m_MaxValue: 0
   m_WholeNumbers: 0
-  m_Value: 0.75
+  m_Value: -20
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1584188641}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetEffectsVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &673462458
 GameObject:
   m_ObjectHideFlags: 0
@@ -2770,13 +2758,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 1540180065}
   m_HandleRect: {fileID: 1188836205}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: -80
+  m_MaxValue: 0
   m_WholeNumbers: 0
-  m_Value: 0.75
+  m_Value: -40
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 770236130}
+        m_TargetAssemblyTypeName: SettingsManager, Assembly-CSharp
+        m_MethodName: SetApplySaveMasterVolume
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3201,7 +3201,7 @@ GameObject:
   - component: {fileID: 770236131}
   - component: {fileID: 770236130}
   m_Layer: 0
-  m_Name: Options Manager
+  m_Name: Settings Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3216,9 +3216,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 770236129}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e94d41e08b2b4144a50593c8d12b292, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b70ea2e391108e4380ff35d60833285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: 98276b75a15048e468c8a87515bfdc35, type: 2}
+  masterVolumeSlider: {fileID: 693095580}
+  effectsVolumeSlider: {fileID: 649793780}
+  musicVolumeSlider: {fileID: 1139828365}
+  resolutionDropdown: {fileID: 1527390234}
+  fullscreenToggle: {fileID: 955132872}
 --- !u!4 &770236131
 Transform:
   m_ObjectHideFlags: 0
@@ -3693,10 +3699,10 @@ AudioSource:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -2471756325973504703, guid: 98276b75a15048e468c8a87515bfdc35, type: 2}
   m_audioClip: {fileID: 8300000, guid: 91a1d6eb837f6744cbd33ddecbfd9270, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3959,7 +3965,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -195.34}
-  m_SizeDelta: {x: 210, y: 60}
+  m_SizeDelta: {x: 240, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &988083182
 MonoBehaviour:
@@ -4287,7 +4293,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 210, y: 60}
+  m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1085004598
 MonoBehaviour:
@@ -4583,25 +4589,13 @@ MonoBehaviour:
   m_FillRect: {fileID: 1112546307}
   m_HandleRect: {fileID: 303195812}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: -80
+  m_MaxValue: 0
   m_WholeNumbers: 0
-  m_Value: 0.25
+  m_Value: -60
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 963194229}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: set_volume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1147635355
 GameObject:
   m_ObjectHideFlags: 0
@@ -7081,7 +7075,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -112.67}
-  m_SizeDelta: {x: 210, y: 60}
+  m_SizeDelta: {x: 270, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1712588217
 MonoBehaviour:
@@ -7883,7 +7877,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -278.01}
-  m_SizeDelta: {x: 210, y: 60}
+  m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1813425856
 MonoBehaviour:
