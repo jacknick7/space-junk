@@ -65,7 +65,7 @@ public class SettingsManager : MonoBehaviour
 
     private void GetApplyDisplaySettings()
     {
-        PlayerPrefs.DeleteAll(); // For testing, remove after!
+        //PlayerPrefs.DeleteAll(); // For testing, remove after!
         if (!PlayerPrefs.HasKey("MusicVolume")) CreateSaveSettings();
         else Debug.Log("PlayerPrefs found!");
         masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume");
@@ -76,6 +76,16 @@ public class SettingsManager : MonoBehaviour
         audioMixer.SetFloat("musicVolume", PlayerPrefs.GetFloat("MusicVolume"));
         // Here check saved resolution exists in resolutions and if it does get the index, if not get the index from the nearest resolution
         // Display the id on the dropdawn
+        int resolutionIndex = 0;
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            if (resolutions[i].width == PlayerPrefs.GetInt("ResolutionWidth") && resolutions[i].height == PlayerPrefs.GetInt("ResolutionHeight"))
+            {
+                resolutionIndex = i;
+                break;
+            }
+        }
+        resolutionDropdown.value = resolutionIndex;
         bool isFullscreen = (PlayerPrefs.GetInt("Fullscreen") == 1);
         fullscreenToggle.isOn = isFullscreen;
         Screen.SetResolution(PlayerPrefs.GetInt("ResolutionWidth"), PlayerPrefs.GetInt("ResolutionHeight"), isFullscreen);
@@ -86,5 +96,34 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetFloat("MasterVolume", masterVolume);
         audioMixer.SetFloat("masterVolume", masterVolume);
         PlayerPrefs.Save();
+    }
+
+    public void SetApplySaveEffectsVolume(float effectsVolume)
+    {
+        PlayerPrefs.SetFloat("EffectsVolume", effectsVolume);
+        audioMixer.SetFloat("effectsVolume", effectsVolume);
+        PlayerPrefs.Save();
+    }
+
+    public void SetApplySaveMusicVolume(float musicVolume)
+    {
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+        audioMixer.SetFloat("musicVolume", musicVolume);
+        PlayerPrefs.Save();
+    }
+
+    public void SetApplySaveResolution(int resolutionIndex)
+    {
+        PlayerPrefs.SetInt("ResolutionWidth", resolutions[resolutionIndex].width);
+        PlayerPrefs.SetInt("ResolutionHeight", resolutions[resolutionIndex].height);
+        bool isFullscreen = (PlayerPrefs.GetInt("Fullscreen") == 1);
+        Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, isFullscreen);
+        PlayerPrefs.Save();
+    }
+
+    public void SetApplySaveFullscreen(bool isFullscreen)
+    {
+        PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
+        Screen.SetResolution(PlayerPrefs.GetInt("ResolutionWidth"), PlayerPrefs.GetInt("ResolutionHeight"), isFullscreen);
     }
 }
