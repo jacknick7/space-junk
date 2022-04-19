@@ -14,7 +14,7 @@ public class SettingsManager : MonoBehaviour
     private const int DEFAULT_RESOLUTION_HEIGHT = 720;
     private const int DEFAULT_FULLSCREEN = 0;
 
-    private Resolution[] resolutions;
+    private List<Resolution> resolutions;// = Resol[];
 
 
     [SerializeField] private AudioMixer audioMixer;
@@ -39,12 +39,21 @@ public class SettingsManager : MonoBehaviour
 
     private void GenerateResolutions()
     {
-        resolutions = Screen.resolutions;
+        Resolution[] originalRes = Screen.resolutions;
+        int maxWidth = originalRes[originalRes.Length].width;
         List<string> resolutionOptions = new List<string>();
-        for (int i = 0; i < resolutions.Length; i++)
+        for (int i = 0; i < originalRes.Length; i++)
         {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
-            resolutionOptions.Add(option);
+            if (i > 0 && originalRes[i].height != resolutions[i - 1].height)
+            {
+                int newWidth = (resolutions[i].height * 21) / 9;
+                if (newWidth > maxWidth) break;
+                resolutions.Add(originalRes[i]);
+                //resolutions[i].width = newWidth;
+                Debug.Log(resolutions[i].width + " x " + resolutions[i].height + " @ " + resolutions[i].refreshRate);
+                string option = resolutions[i].width + " x " + resolutions[i].height;
+                resolutionOptions.Add(option);
+            }
         }
         resolutionDropdown.ClearOptions();
         resolutionDropdown.AddOptions(resolutionOptions);
@@ -65,7 +74,7 @@ public class SettingsManager : MonoBehaviour
 
     private void GetApplyDisplaySettings()
     {
-        //PlayerPrefs.DeleteAll(); // For testing, remove after!
+        PlayerPrefs.DeleteAll(); // For testing, remove after!
         if (!PlayerPrefs.HasKey("MusicVolume")) CreateSaveSettings();
         else Debug.Log("PlayerPrefs found!");
         masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume");
