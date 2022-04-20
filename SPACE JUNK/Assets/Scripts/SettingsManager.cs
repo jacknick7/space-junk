@@ -7,15 +7,14 @@ using TMPro;
 
 public class SettingsManager : MonoBehaviour
 {
-    private const float DEFAULT_MASTER_VOLUME = 0.0f;//-40.0f;
-    private const float DEFAULT_EFFECTS_VOLUME = 0.0f;//-20.0f;
-    private const float DEFAULT_MUSIC_VOLUME = 0.0f;//-60.0f;
+    private const float DEFAULT_MASTER_VOLUME = 0.0f;
+    private const float DEFAULT_EFFECTS_VOLUME = 0.0f;
+    private const float DEFAULT_MUSIC_VOLUME = 0.0f;
     private const int DEFAULT_RESOLUTION_WIDTH = 1680;
     private const int DEFAULT_RESOLUTION_HEIGHT = 720;
     private const int DEFAULT_FULLSCREEN = 0;
 
-    private List<Resolution> resolutions;// = Resol[];
-
+    private List<Resolution> resolutions;
 
     [SerializeField] private AudioMixer audioMixer;
 
@@ -31,29 +30,33 @@ public class SettingsManager : MonoBehaviour
         GetApplyDisplaySettings();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void GenerateResolutions()
     {
         Resolution[] originalRes = Screen.resolutions;
-        int maxWidth = originalRes[originalRes.Length].width;
-        List<string> resolutionOptions = new List<string>();
-        for (int i = 0; i < originalRes.Length; i++)
+        int maxWidth = originalRes[originalRes.Length - 1].width;
+        resolutions = new List<Resolution>();
+
+        int newWidth = (originalRes[0].height * 21) / 9;
+        Resolution newRes = originalRes[0];
+        newRes.width = newWidth;
+        resolutions.Add(newRes);
+        for (int i = 1; i < originalRes.Length; i++)
         {
-            if (i > 0 && originalRes[i].height != resolutions[i - 1].height)
+            if (originalRes[i].height != resolutions[resolutions.Count - 1].height)
             {
-                int newWidth = (resolutions[i].height * 21) / 9;
+                newWidth = (originalRes[i].height * 21) / 9;
                 if (newWidth > maxWidth) break;
-                resolutions.Add(originalRes[i]);
-                //resolutions[i].width = newWidth;
-                Debug.Log(resolutions[i].width + " x " + resolutions[i].height + " @ " + resolutions[i].refreshRate);
-                string option = resolutions[i].width + " x " + resolutions[i].height;
-                resolutionOptions.Add(option);
+                newRes = originalRes[i];
+                newRes.width = newWidth;
+                resolutions.Add(newRes);
             }
+        }
+
+        List<string> resolutionOptions = new List<string>();
+        foreach (Resolution res in resolutions)
+        {
+            string option = res.width + " x " + res.height;
+            resolutionOptions.Add(option);
         }
         resolutionDropdown.ClearOptions();
         resolutionDropdown.AddOptions(resolutionOptions);
@@ -61,7 +64,6 @@ public class SettingsManager : MonoBehaviour
 
     private void CreateSaveSettings()
     {
-        Debug.Log("No PlayerPrefs found! Creating one with default values...");
         PlayerPrefs.DeleteAll();
         PlayerPrefs.SetFloat("MasterVolume", DEFAULT_MASTER_VOLUME);
         PlayerPrefs.SetFloat("EffectsVolume", DEFAULT_EFFECTS_VOLUME);
@@ -74,19 +76,15 @@ public class SettingsManager : MonoBehaviour
 
     private void GetApplyDisplaySettings()
     {
-        PlayerPrefs.DeleteAll(); // For testing, remove after!
         if (!PlayerPrefs.HasKey("MusicVolume")) CreateSaveSettings();
-        else Debug.Log("PlayerPrefs found!");
         masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume");
         audioMixer.SetFloat("masterVolume", PlayerPrefs.GetFloat("MasterVolume"));
         effectsVolumeSlider.value = PlayerPrefs.GetFloat("EffectsVolume");
         audioMixer.SetFloat("effectsVolume", PlayerPrefs.GetFloat("EffectsVolume"));
         musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
         audioMixer.SetFloat("musicVolume", PlayerPrefs.GetFloat("MusicVolume"));
-        // Here check saved resolution exists in resolutions and if it does get the index, if not get the index from the nearest resolution
-        // Display the id on the dropdawn
         int resolutionIndex = 0;
-        for (int i = 0; i < resolutions.Length; i++)
+        for (int i = 0; i < resolutions.Count; i++)
         {
             if (resolutions[i].width == PlayerPrefs.GetInt("ResolutionWidth") && resolutions[i].height == PlayerPrefs.GetInt("ResolutionHeight"))
             {
