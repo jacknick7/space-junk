@@ -2,6 +2,6 @@
 public class LeaderboardData
 {
     public bool[] isUsed;
-    public string[] names;
-    public int[] scores;
+    public string[] name;
+    public int[] score;
 }
