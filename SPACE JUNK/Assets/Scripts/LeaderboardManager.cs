@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using TMPro;
 
 public class LeaderboardManager : MonoBehaviour
 {
@@ -12,10 +13,14 @@ public class LeaderboardManager : MonoBehaviour
 
     private LeaderboardData lb;
 
+    [SerializeField] private TextMeshProUGUI[] nameText;
+    [SerializeField] private TextMeshProUGUI[] scoreText;
+
 
     void Start()
     {
         LoadLeaderboard();
+        DisplayLeaderboard();
     }
 
 
@@ -66,27 +71,39 @@ public class LeaderboardManager : MonoBehaviour
     }
 
 
+    // TODO: check this works fine when same name is entered
     public void AddNewRecord(string newName, int newScore)
     {
         int newRecordIndex = -1;
         for (int i = 0; i < LEADERBOARD_SIZE; i++)
         {
-            if (lb.isUsed[i] && lb.score[i] > newScore)
+            if (lb.isUsed[i] && lb.name[i] == newName && lb.score[i] < newScore)
             {
-                newRecordIndex = i - 1;
+                newRecordIndex = i;
                 break;
             }
         }
-        if (newRecordIndex < 0) newRecordIndex = LEADERBOARD_SIZE - 1;
-
-        for (int i = 0; i < newRecordIndex; i++)
+        if (newRecordIndex < 0)
         {
-            if (lb.isUsed[i + 1])
+            for (int i = 0; i < LEADERBOARD_SIZE; i++)
             {
-                lb.name[i] = lb.name[i + 1];
-                lb.score[i] = lb.score[i + 1];
+                if (lb.isUsed[i] && lb.score[i] > newScore)
+                {
+                    newRecordIndex = i - 1;
+                    break;
+                }
             }
-            lb.isUsed[i] = lb.isUsed[i + 1];
+            if (newRecordIndex < 0) newRecordIndex = LEADERBOARD_SIZE - 1;
+
+            for (int i = 0; i < newRecordIndex; i++)
+            {
+                if (lb.isUsed[i + 1])
+                {
+                    lb.name[i] = lb.name[i + 1];
+                    lb.score[i] = lb.score[i + 1];
+                }
+                lb.isUsed[i] = lb.isUsed[i + 1];
+            }
         }
 
         lb.isUsed[newRecordIndex] = true;
@@ -94,16 +111,25 @@ public class LeaderboardManager : MonoBehaviour
         lb.score[newRecordIndex] = newScore;
 
         SaveLeaderboard();
+        DisplayLeaderboard();
     }
 
 
-    public void DisplayLeaderboard()
+    private void DisplayLeaderboard()
     {
         Debug.Log("Position   Name   Score");
         for (int i = 0; i < LEADERBOARD_SIZE; i++)
         {
-            if (lb.isUsed[i]) Debug.Log((LEADERBOARD_SIZE - i) + "   ---   ---");
-            else Debug.Log((LEADERBOARD_SIZE - i) + "   " + lb.name[i] + "   " + lb.score[i]);
+            if (lb.isUsed[i])
+            {
+                nameText[i].text = lb.name[i];
+                scoreText[i].text = lb.score[i].ToString();
+            }
+            else
+            {
+                nameText[i].text = "---";
+                scoreText[i].text = "---";
+            }
         }
     }
 }

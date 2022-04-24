@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private PlayerController playerController;
     [SerializeField] private SpawnManager spawnManager;
+    [SerializeField] private LeaderboardManager lbManager;
 
     public float effectsVolume = 0.75f;
 
@@ -84,6 +85,13 @@ public class GameManager : MonoBehaviour
 
         uIScreen.SetActive(false);
         finalScoreText.SetText("SCORE: " + score);
+        if (lbManager.IsNewRecord(score))
+        {
+            // Here show UI input record name if its record
+            // The following is for testing only, remove after
+            string newName = "user" + Random.Range(0, 100);
+            lbManager.AddNewRecord(newName, score);
+        }
         gameOverScreen.SetActive(true);
     }
 
