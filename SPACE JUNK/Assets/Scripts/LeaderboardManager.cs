@@ -77,33 +77,22 @@ public class LeaderboardManager : MonoBehaviour
         int newRecordIndex = -1;
         for (int i = 0; i < LEADERBOARD_SIZE; i++)
         {
-            if (lb.isUsed[i] && lb.name[i] == newName && lb.score[i] < newScore)
+            if (lb.isUsed[i] && lb.score[i] > newScore)
             {
-                newRecordIndex = i;
+                newRecordIndex = i - 1;
                 break;
             }
         }
-        if (newRecordIndex < 0)
-        {
-            for (int i = 0; i < LEADERBOARD_SIZE; i++)
-            {
-                if (lb.isUsed[i] && lb.score[i] > newScore)
-                {
-                    newRecordIndex = i - 1;
-                    break;
-                }
-            }
-            if (newRecordIndex < 0) newRecordIndex = LEADERBOARD_SIZE - 1;
+        if (newRecordIndex < 0) newRecordIndex = LEADERBOARD_SIZE - 1;
 
-            for (int i = 0; i < newRecordIndex; i++)
+        for (int i = 0; i < newRecordIndex; i++)
+        {
+            if (lb.isUsed[i + 1])
             {
-                if (lb.isUsed[i + 1])
-                {
-                    lb.name[i] = lb.name[i + 1];
-                    lb.score[i] = lb.score[i + 1];
-                }
-                lb.isUsed[i] = lb.isUsed[i + 1];
+                lb.name[i] = lb.name[i + 1];
+                lb.score[i] = lb.score[i + 1];
             }
+            lb.isUsed[i] = lb.isUsed[i + 1];
         }
 
         lb.isUsed[newRecordIndex] = true;

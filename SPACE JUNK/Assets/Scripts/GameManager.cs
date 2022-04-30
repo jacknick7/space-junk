@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject pauseScreen;
 
     [SerializeField] private TextMeshProUGUI finalScoreText;
+    [SerializeField] private TMP_InputField nameInputField;
+    [SerializeField] private Button saveButton;
     [SerializeField] private GameObject gameOverScreen;
 
     [SerializeField] private PlayerController playerController;
@@ -89,8 +92,15 @@ public class GameManager : MonoBehaviour
         {
             // Here show UI input record name if its record
             // The following is for testing only, remove after
+            nameInputField.gameObject.SetActive(true);
+            saveButton.gameObject.SetActive(true);
             string newName = "user" + Random.Range(0, 100);
             lbManager.AddNewRecord(newName, score);
+        }
+        else
+        {
+            nameInputField.gameObject.SetActive(false);
+            saveButton.gameObject.SetActive(false);
         }
         gameOverScreen.SetActive(true);
     }
