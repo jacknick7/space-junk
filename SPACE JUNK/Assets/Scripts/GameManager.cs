@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI finalScoreText;
     [SerializeField] private TMP_InputField nameInputField;
-    [SerializeField] private Button saveButton;
+    [SerializeField] private GameObject saveButtonGO;
     [SerializeField] private GameObject gameOverScreen;
 
     [SerializeField] private PlayerController playerController;
@@ -90,19 +90,22 @@ public class GameManager : MonoBehaviour
         finalScoreText.SetText("SCORE: " + score);
         if (lbManager.IsNewRecord(score))
         {
-            // Here show UI input record name if its record
-            // The following is for testing only, remove after
+            nameInputField.text = "";
             nameInputField.gameObject.SetActive(true);
-            saveButton.gameObject.SetActive(true);
-            string newName = "user" + Random.Range(0, 100);
-            lbManager.AddNewRecord(newName, score);
+            saveButtonGO.SetActive(true);
         }
         else
         {
             nameInputField.gameObject.SetActive(false);
-            saveButton.gameObject.SetActive(false);
+            saveButtonGO.SetActive(false);
         }
         gameOverScreen.SetActive(true);
+    }
+
+    // TODO: check if the name is valid (0 < length <= 8) if not show a message inside InputField and don't allow to be added to record
+    public void SaveNewRecord()
+    {
+        lbManager.AddNewRecord(nameInputField.text, score);
     }
 
     public void QuitGame()

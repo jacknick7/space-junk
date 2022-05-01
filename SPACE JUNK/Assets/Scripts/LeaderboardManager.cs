@@ -36,10 +36,11 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-
+    // TODO: find a way to encrypt the leaderboard so it can't be modified easly by the player
     private void LoadLeaderboard()
     {
         string path = Application.persistentDataPath + SAVE_FILE_NAME;
+        Debug.Log(path);
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -71,7 +72,6 @@ public class LeaderboardManager : MonoBehaviour
     }
 
 
-    // TODO: check this works fine when same name is entered
     public void AddNewRecord(string newName, int newScore)
     {
         int newRecordIndex = -1;
@@ -106,7 +106,6 @@ public class LeaderboardManager : MonoBehaviour
 
     private void DisplayLeaderboard()
     {
-        Debug.Log("Position   Name   Score");
         for (int i = 0; i < LEADERBOARD_SIZE; i++)
         {
             if (lb.isUsed[i])
