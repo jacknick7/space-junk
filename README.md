@@ -1,3 +1,4 @@
+![Image](Images/banner.png)
 # SPACE JUNK
 Welcome to SPACE JUNK, a not-so-great game about helping the safety of space travel by disintegrating space junk in the near future.
 
