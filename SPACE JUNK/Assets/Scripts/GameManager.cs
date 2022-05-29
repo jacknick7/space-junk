@@ -31,8 +31,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpawnManager spawnManager;
     [SerializeField] private LeaderboardManager lbManager;
 
-    public float effectsVolume = 0.75f;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -132,10 +130,5 @@ public class GameManager : MonoBehaviour
             shieldText.SetText("SHIELD: --");
             GameOver();
         }
-    }
-
-    public void SetEffectsVolume(float newEffectsVolume)
-    {
-        effectsVolume = newEffectsVolume;
     }
 }

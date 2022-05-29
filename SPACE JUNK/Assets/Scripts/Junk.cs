@@ -28,7 +28,6 @@ public class Junk : MonoBehaviour
         escapeScore = -disintegrationScore / 2;
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         destroyAudioSource = GetComponent<AudioSource>();
-        destroyAudioSource.volume = gameManager.effectsVolume;
         disintegrationDelayTime = destroyAudioSource.clip.length;
         escapeDelayTime = escapeAudioClip.length;
     }

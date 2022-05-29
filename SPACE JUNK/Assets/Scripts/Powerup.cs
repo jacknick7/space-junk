@@ -20,7 +20,6 @@ public class Powerup : MonoBehaviour
     {
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         usedAudioSource = GetComponent<AudioSource>();
-        usedAudioSource.volume = gameManager.effectsVolume;
         usedDelayTime = usedAudioSource.clip.length;
     }
 

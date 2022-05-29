@@ -203,9 +203,7 @@ public class PlayerController : MonoBehaviour
         playerRb.velocity = Vector3.zero;
         spaceship.SetActive(true);
         isInvincible = false;
-        shieldAudioSource.volume = gameManager.effectsVolume;
         shield.SetActive(false);
-        explosionAudioSource.volume = gameManager.effectsVolume;
         explosion.SetActive(false);
         bulletTimer = 0;
         outOfBoundsTimer = 0;

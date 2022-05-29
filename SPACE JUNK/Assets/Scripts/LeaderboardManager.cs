@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -8,10 +6,9 @@ using TMPro;
 public class LeaderboardManager : MonoBehaviour
 {
     private const int LEADERBOARD_SIZE = 5;
-
     private const string SAVE_FILE_NAME = "/gamedata.bin";
 
-    private LeaderboardData lb;
+    private LeaderboardData lbData;
 
     [SerializeField] private TextMeshProUGUI[] nameText;
     [SerializeField] private TextMeshProUGUI[] scoreText;
@@ -26,13 +23,11 @@ public class LeaderboardManager : MonoBehaviour
 
     private void CreateLeaderboard()
     {
-        lb = new LeaderboardData();
-        lb.isUsed = new bool[LEADERBOARD_SIZE];
-        lb.name = new string[LEADERBOARD_SIZE];
-        lb.score = new int[LEADERBOARD_SIZE];
+        lbData = new LeaderboardData();
+        lbData.leaderboard = new lbentry[LEADERBOARD_SIZE];
         for (int i = 0; i < LEADERBOARD_SIZE; i++)
         {
-            lb.isUsed[i] = false;
+            lbData.leaderboard[i].isUsed = false;
         }
     }
 
@@ -40,12 +35,11 @@ public class LeaderboardManager : MonoBehaviour
     private void LoadLeaderboard()
     {
         string path = Application.persistentDataPath + SAVE_FILE_NAME;
-        Debug.Log(path);
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
-            lb = formatter.Deserialize(stream) as LeaderboardData;
+            lbData = formatter.Deserialize(stream) as LeaderboardData;
         }
         else
         {
@@ -60,14 +54,14 @@ public class LeaderboardManager : MonoBehaviour
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + SAVE_FILE_NAME;
         FileStream stream = new FileStream(path, FileMode.Create);
-        formatter.Serialize(stream, lb);
+        formatter.Serialize(stream, lbData);
         stream.Close();
     }
 
 
     public bool IsNewRecord(int newScore)
     {
-        if (!lb.isUsed[0] || lb.score[0] < newScore) return true;
+        if (!lbData.leaderboard[0].isUsed || lbData.leaderboard[0].score < newScore) return true;
         return false;
     }
 
@@ -77,7 +71,7 @@ public class LeaderboardManager : MonoBehaviour
         int newRecordIndex = -1;
         for (int i = 0; i < LEADERBOARD_SIZE; i++)
         {
-            if (lb.isUsed[i] && lb.score[i] > newScore)
+            if (lbData.leaderboard[i].isUsed && lbData.leaderboard[i].score > newScore)
             {
                 newRecordIndex = i - 1;
                 break;
@@ -87,17 +81,17 @@ public class LeaderboardManager : MonoBehaviour
 
         for (int i = 0; i < newRecordIndex; i++)
         {
-            if (lb.isUsed[i + 1])
+            if (lbData.leaderboard[i + 1].isUsed)
             {
-                lb.name[i] = lb.name[i + 1];
-                lb.score[i] = lb.score[i + 1];
+                lbData.leaderboard[i].name = lbData.leaderboard[i + 1].name;
+                lbData.leaderboard[i].score = lbData.leaderboard[i + 1].score;
             }
-            lb.isUsed[i] = lb.isUsed[i + 1];
+            lbData.leaderboard[i].isUsed = lbData.leaderboard[i + 1].isUsed;
         }
 
-        lb.isUsed[newRecordIndex] = true;
-        lb.name[newRecordIndex] = newName;
-        lb.score[newRecordIndex] = newScore;
+        lbData.leaderboard[newRecordIndex].isUsed = true;
+        lbData.leaderboard[newRecordIndex].name = newName;
+        lbData.leaderboard[newRecordIndex].score = newScore;
 
         SaveLeaderboard();
         DisplayLeaderboard();
@@ -108,10 +102,10 @@ public class LeaderboardManager : MonoBehaviour
     {
         for (int i = 0; i < LEADERBOARD_SIZE; i++)
         {
-            if (lb.isUsed[i])
+            if (lbData.leaderboard[i].isUsed)
             {
-                nameText[i].text = lb.name[i];
-                scoreText[i].text = lb.score[i].ToString();
+                nameText[i].text = lbData.leaderboard[i].name;
+                scoreText[i].text = lbData.leaderboard[i].score.ToString();
             }
             else
             {
